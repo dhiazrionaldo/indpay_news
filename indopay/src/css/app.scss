@@ -1,1 +1,65 @@
-// app global css in SCSS form
+.text-divider {
+    --text-divider-gap: 1rem;
+    display: flex;
+    align-items: center;
+    font-size: 1.9375rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  
+  .text-divider::before, .text-divider::after {
+    content: '';
+    height: 3px;
+    background-color: #444272;
+    flex-grow: 1;
+  }
+  
+  .text-divider::before {
+    margin-right: var(--text-divider-gap);
+  }
+  
+  .text-divider::after {
+    margin-left: var(--text-divider-gap);
+  }
+  
+  /* demo stuff */
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  /*small divider */
+  .text-divider-small {
+    --text-divider-gap: 1rem;
+    display: flex;
+    align-items: center;
+    font-size: 1.9375rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  
+  .text-divider-small::before, .text-divider-small::after {
+    content: '';
+    height: 3px;
+    background-color: #444272;
+    flex-grow: 1;
+  }
+  
+  .text-divider-small::before {
+    margin-right: var(--text-divider-gap);
+  }
+  
+  .text-divider-small::after {
+    margin-left: var(--text-divider-gap);
+  }
+
+  .custom-caption{
+    text-align: center;
+    padding: 12px;
+    color: white;
+    background-color: rgba(0, 0, 0, .3);
+  }
+  

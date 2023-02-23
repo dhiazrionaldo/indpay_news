@@ -1,49 +1,95 @@
 <template>
-  <div class="q-pa-md row items-start q-gutter-md">
-    <div class="row items-start">
-      <div class="col">
-        <q-card class="my-card" flat bordered v-for="items in articles" :key="items.Id">
-          <q-card-section horizontal>
-            <q-card-section class="q-pt-xs">
-              <div class="text-overline">{{items.author}}</div>
-              <div class="text-h5 q-mt-sm q-mb-xs">{{items.title}}</div>
-              <div class="text-caption text-grey">
-                {{items.description}}
-              </div>
-            </q-card-section>
-
-            <q-card-section class="col-5 flex flex-center">
-              <q-img
-                class="rounded-borders"
-                :src=items.urlToImage
-              />
-            </q-card-section>
-          </q-card-section>
-
-          <q-separator />
-
-          <q-card-actions>
-            <q-btn flat>
-              Share
-            </q-btn>
-            <q-btn flat color="primary">
-              Save
-            </q-btn>
-          </q-card-actions>
-        </q-card>
+<div class="q-pa-md">
+  <q-carousel
+    animated
+    v-model="slide"
+    infinite
+    :autoplay="autoplay"
+    arrows
+    transition-prev="slide-right"
+    transition-next="slide-left"
+    @mouseenter="autoplay = false"
+    @mouseleave="autoplay = true"
+  >
+  <q-carousel-slide v-for="items in headline" :name="items.title" :key="items.title" :img-src="items.urlToImage">
+    <div class="absolute-bottom custom-caption">
+        <div class="text-h2">{{items.title}}</div>
+        <div class="text-subtitle1">{{items.overline}}</div>
       </div>
+  </q-carousel-slide>
+  </q-carousel>
+</div>
+<div class="text-divider">Headline</div>
+<div class="q-ma-md q-col-gutter-lg" v-if="articles[5]">
+  <q-card class="my-card">
+    <q-card-section horizontal>
+      <q-img
+        class="col-5"
+        :src="articles[5].urlToImage"
+      />
+
+      <q-card-section>
+        <div class="text-h5 bold">{{articles[5].title}}</div>
+        <div class="q-ma-sm text-caption">{{ articles[5].description }}</div>
+      </q-card-section>
+    </q-card-section>
+
+    <q-separator />
+
+    <q-card-actions>
+      <q-btn flat color="primary" @click="goToUrl(articles[5].url)">
+        READ MORE
+      </q-btn>
+    </q-card-actions>
+  </q-card>
+</div>
+  
+
+
+<div class="text-divider-small">More News</div>
+
+<div class="row q-col-gutter-lg q-ma-sm">
+  <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" v-for="items in articles" :key="items.source.name">
+    <div class="q-pa-md">
+      <q-card class="my-card" flat bordered>
+        <q-img
+          :src="items.urlToImage"
+        />
+
+        <q-card-section>
+          <div>{{formatDate(items.publishedAt)}}</div>
+          <div class="text-overline text-orange-9">{{items.author}}</div>
+          <div class="text-h5 q-mt-sm q-mb-xs">{{items.title}}</div>
+          <div class="text-caption text-grey">{{items.description}}</div>
+        </q-card-section>
+
+        <q-card-actions>
+          <q-btn flat color="dark" label="read more" @click="goToUrl(items.url)" />
+        </q-card-actions>
+
+      </q-card>
     </div>
-  </div>
+    </div>
+</div>
 </template>
 
 <script>
+import {ref} from 'vue'
 import news_tesla from '../api/news_tesla'
+import moment from 'moment'
 
 export default {
+  setup(){
+    return {
+      slide: ref(1),
+      autoplay: ref(true)
+    }
+  },
   data() {
     return{
       berita:{},
-      articles: []
+      articles: [],
+      headline: [],
     }    
   },
   mounted(){
@@ -51,7 +97,18 @@ export default {
       this.berita = response.data
       this.articles = response.data.articles
     })
-    
+    news_tesla.getHeadLine().then(response => {
+      this.headline = response.data.articles
+    })
+  }, 
+  methods:{
+    goToUrl(url){
+      window.open(url);
+    },
+    formatDate (dateString) {
+      // Format the date using a library like moment.js
+      return moment(dateString).format('MMMM D, YYYY')
+    }
   }
 }
 </script>

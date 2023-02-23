@@ -12,7 +12,7 @@
 
         <q-space />
 
-         <q-input label-color="white" dark dense  v-model="text" input-class="text-right" class="row q-ml-md" label="Search news here">
+         <q-input style="width: 30%" label-color="white" dark dense  v-model="text" input-class="text-right" class="row q-ml-md" label="Search news">
           <template v-slot:append>
             <q-icon v-if="text === ''" name="search" color="white" />
             <q-icon v-else name="clear" class="cursor-pointer" @click="text = ''" />
